@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>简单的sea.js 使用实例-幸凡学习网</title>
+    <script src="node_modules/seajs/dist/sea.js"></script>
+    <style>
+        /**本页面排版样式**/
+        body{line-height:25px;font-size:14px;}
+        .mt10{margin-top:10px;}
+        .plr10{padding:0 10px}
+        .ex dl{border:1px solid #e6e6e6;margin-bottom:10px;}
+        .ex dt{font-size:14px;margin:0 0 10px;background:#e6e6e6;padding:0 10px;height:30px;line-height:30px;position:relative;color:#666;}
+        .ex dd{margin-left:20px;padding-bottom:10px;color:#999;}
+        .ex a{color:#f80;text-decoration:none;margin-right:10px;}
+        .ex input{margin:0 5px;}
+        .ex .bgeee{background:#f80;color:#fff;}
+        .ex .right{position:absolute;right:10px;top:0;height:30px;line-height:30px;color:#f80;font-size:12px;margin:0;}
+
+    </style>
+</head>
+<body>
+    <div class="ex">
+        <dl>
+            <dt>示例一：加载内容到html</dt>
+            <dd>
+                <input type="button" id="load" value="加载内容" />
+                <div id="content" class="bgeee plr10 mt10"></div>
+            </dd>
+        </dl>
+
+        <dl>
+            <dt>示例二：弹窗</dt>
+            <dd>
+                <input type="button" id="openwindow" value="弹窗" /><input type="button" id="opentxt" value="文字提示" />
+            </dd>
+        </dl>
+
+        <dl>
+            <dt>示例三：cookie操作 <span class="right">提示:设置为null即为清除cookie</span></dt>
+            <dd>
+                <div class="plr10">
+                    <div>请为【just】cookie赋值<input value="" id="cookievalue" /><input type="button" id="addcookie" value="写入cookie" /><input type="button" id="getcookie" value="获取cookie" /></div>
+                    
+                </div>
+            </dd>
+        </dl>
+    </div>
+    <script>        
+        //Set configuration
+        seajs.config({
+            base: "./js/",//与当前目录平级的js目录
+            alias: {
+                "$": "http://apps.bdimg.com/libs/jquery/1.8.3/jquery.js"
+            }
+        });
+
+        //加载多个模块，在加载完成时，执行回调
+        seajs.use(["mod1"], function (a, b) {
+            seajs.use("$");
+            $("#load").click(function () {
+                a.helloJs();
+            });            
+        });     
+        
+        //cookie插件
+        seajs.use(["cookie"], function (a) {
+            seajs.use("$");
+
+            $("#addcookie").click(function () {
+                if ($.trim($("#cookievalue").val()) != "")
+                    a.cookie("just", $("#cookievalue").val());
+            });
+
+            $("#getcookie").click(function () {
+                alert("just 的cookie为："+a.cookie("just"));
+            });
+
+            //写入a.cookie("cs", "你好")
+            //a.cookie("cs", "你好");
+
+            //获取a.cookie("cs")
+            //a.cookie("cs");
+
+            //清除cookie只需要设置为null
+            //a.cookie("cs", null);            
+        })
+
+
+        //弹窗口插件
+        seajs.use(["laybox"], function (a) {
+            seajs.use("$");
+
+            //弹出窗口
+            $("#openwindow").click(function () {
+                a.layboxs("ifame.html");
+            });
+
+            //弹出文字提示
+            $("#opentxt").click(function () {
+                a.layboxs("你好我是提示文字，2秒钟后关闭", "2");//第2个参数为窗口显示几秒钟自动关闭，如果不写将手动关闭
+            });
+        });
+</script>
+</body>
+</html>
